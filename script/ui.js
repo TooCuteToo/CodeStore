@@ -1,22 +1,19 @@
-import Storage from '/script/storage.js';
+import Storage from "/script/storage.js";
 
-const gameContainer = document.querySelector('#game-container');
-const cartContainer = document.querySelector('.cart-container');
-const cartDOM = document.querySelector('.cart');
-const cartItemContainer = document.querySelector('#cart-items-container');
+const gameContainer = document.querySelector("#game-container");
+const cartContainer = document.querySelector(".cart-container");
+const cartDOM = document.querySelector(".cart");
+const cartItemContainer = document.querySelector("#cart-items-container");
 
-// Mang cart dung de setup du lieu tu gio hang
 let cart = [];
 
-// Mang chua cac nut add item de chuan bi cho setup gio hang
 let buttonDOM = [];
 
 export default class UI {
-	// Hien thi cac game co trong du lieu
-	displayGames(games) {
-		let gameContent = '';
-		games.forEach(x => {
-			gameContent += `
+  displayGames(games) {
+    let gameContent = "";
+    games.forEach((x) => {
+      gameContent += `
 				<article class="game">
 					<div class="game-img">
 						<img src="${x.img}">
@@ -28,27 +25,24 @@ export default class UI {
 					</div>
 				</article>
 			`;
-		});
-		gameContainer.innerHTML = gameContent;
-	}
+    });
+    gameContainer.innerHTML = gameContent;
+  }
 
-	// Hieu ung cuon trang 
-	scrollEffect() {
-		lax.setup(); // init
-		const updateLax = () => {
-			lax.update(window.scrollY);
-			window.requestAnimationFrame(updateLax);
-		}
-		window.requestAnimationFrame(updateLax);
-	}
+  scrollEffect() {
+    lax.setup();
+    const updateLax = () => {
+      lax.update(window.scrollY);
+      window.requestAnimationFrame(updateLax);
+    };
+    window.requestAnimationFrame(updateLax);
+  }
 
-	addItemToCart(game) {
-		// Tao ra wrapper element de goi item vao
-		let cartItem = document.createElement('div');
-		cartItem.classList.add('cart-items');
-		
-		// Cau truc dom cua item 
-		let item = `
+  addItemToCart(game) {
+    let cartItem = document.createElement("div");
+    cartItem.classList.add("cart-items");
+
+    let item = `
 			<img src="${game.img}">
 			<div class="item-detail">
 				<p class="title">${game.title}</p>
@@ -62,164 +56,139 @@ export default class UI {
 			</div>
 		`;
 
-		// Them item vao cart dom
-		cartItem.innerHTML = item;
-		cartItemContainer.appendChild(cartItem);
-	}
+    cartItem.innerHTML = item;
+    cartItemContainer.appendChild(cartItem);
+  }
 
-	setUpCart() {
-		cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
-		this.setCartValue(cart);
-		
-		// Cau truc dom cua item 
-		cart.forEach(game => {
-			this.addItemToCart(game);
-		});	
+  setUpCart() {
+    cart = localStorage.getItem("cart")
+      ? JSON.parse(localStorage.getItem("cart"))
+      : [];
+    this.setCartValue(cart);
 
-		buttonDOM.forEach(btn => {
-			if (cart.find(x => x.id === btn.dataset.id))
-				this.disabledBtn(btn);
-		});
-	}
+    cart.forEach((game) => {
+      this.addItemToCart(game);
+    });
 
-	// Hien thi gio hang
-	showCart() {
-		cartContainer.classList.add('transparentBG');
-		cartDOM.classList.add('showCart');
-	}
+    buttonDOM.forEach((btn) => {
+      if (cart.find((x) => x.id === btn.dataset.id)) this.disabledBtn(btn);
+    });
+  }
 
-	// Dong gio hang
-	closeCart() {
-		cartContainer.classList.remove('transparentBG');
-		cartDOM.classList.remove('showCart');
-	}
+  showCart() {
+    cartContainer.classList.add("transparentBG");
+    cartDOM.classList.add("showCart");
+  }
 
-	// Tinh gia tri cua gio hang
-	setCartValue(cart) {
-		let cartTotal = document.querySelector('.cart-total');
-		let itemAmount = document.querySelector('#item-amount');
-		let tempTotal = 0;
-		let tempAmount = 0;
+  closeCart() {
+    cartContainer.classList.remove("transparentBG");
+    cartDOM.classList.remove("showCart");
+  }
 
-		if (cart) {
-			cart.forEach(x => {
-				tempTotal += x.price * x.amount; // Tinh tong tien trong gio hang
-				tempAmount += x.amount // Tinh tong so luong trong gio
-			});
-		}
-		cartTotal.innerText = tempTotal;
-		itemAmount.innerText = tempAmount;
-	}
+  setCartValue(cart) {
+    let cartTotal = document.querySelector(".cart-total");
+    let itemAmount = document.querySelector("#item-amount");
+    let tempTotal = 0;
+    let tempAmount = 0;
 
-	// Vo hieu hoa no them vao gio
-	disabledBtn(btn) {
-		btn.disabled = true;
-		btn.innerHTML = 'in cart';
-	}
+    if (cart) {
+      cart.forEach((x) => {
+        tempTotal += x.price * x.amount;
+        tempAmount += x.amount;
+      });
+    }
+    cartTotal.innerText = tempTotal;
+    itemAmount.innerText = tempAmount;
+  }
 
-	// Them item vao gio hang va thuc hien cac chuc nang kem theo
-	addCartFunction() {
-		const buttons = [...document.querySelectorAll('.add-btn')];
-		buttonDOM = buttons;
-		buttons.forEach((btn) => {
-			btn.addEventListener('click', (event) => {
+  disabledBtn(btn) {
+    btn.disabled = true;
+    btn.innerHTML = "in cart";
+  }
 
-				const id = btn.dataset.id;
-				// Dung spread operator de copy object va tao ra object moi
-				const game = { ...Storage.getGame(id), amount : 1 };
+  addCartFunction() {
+    const buttons = [...document.querySelectorAll(".add-btn")];
+    buttonDOM = buttons;
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        const id = btn.dataset.id;
+        const game = { ...Storage.getGame(id), amount: 1 };
 
-				// Push game da dc them vao trong mang cart va save mang cart lai
-				cart.push(game);
-				// Tao lien ket giua cart va local storage cua no
-				Storage.saveCart(cart);
-				this.addItemToCart(game);
-				
-				// Vo hieu hoa nut them vao gio hang neu nhu da them
-				this.disabledBtn(btn);
-				// Hien thi gio hang 
-				this.showCart();
-				// Tinh tong tien va so luong item trong gio hang
-				this.setCartValue(cart);
-			});
-		});
-	}
+        cart.push(game);
+        Storage.saveCart(cart);
+        this.addItemToCart(game);
 
-	activeBtn(btn) {
-		btn.disabled = false;
-		btn.innerText = 'add to cart';
-	}
+        this.disabledBtn(btn);
+        this.showCart();
+        this.setCartValue(cart);
+      });
+    });
+  }
 
-	removeOffCart(id) {
-		const removeBtn = document.querySelectorAll('.remove-btn');
-		removeBtn.forEach(removebtn => {
-			if (removebtn.dataset.id === id) {
-				cartItemContainer.removeChild(event.target.parentElement.parentElement);
-				buttonDOM.forEach(x => {
-					if (x.dataset.id === removebtn.dataset.id)
-						this.activeBtn(x);
-				})
-			}
-		});
-	}
+  activeBtn(btn) {
+    btn.disabled = false;
+    btn.innerText = "add to cart";
+  }
 
-	// Chay cac nut dong, xoa gio hang, tang/giam so luong,...
-	cartLogic() {
-		cartDOM.addEventListener('click', (event) => {
-			// Dong gio hang khi nhan nut close
-			if (event.target.classList.contains('fa-window-close'))
-				this.closeCart();
+  removeOffCart(id) {
+    const removeBtn = document.querySelectorAll(".remove-btn");
+    removeBtn.forEach((removebtn) => {
+      if (removebtn.dataset.id === id) {
+        cartItemContainer.removeChild(event.target.parentElement.parentElement);
+        buttonDOM.forEach((x) => {
+          if (x.dataset.id === removebtn.dataset.id) this.activeBtn(x);
+        });
+      }
+    });
+  }
 
-			// Thiet lap chuc nang cho clear btn
-			else if (event.target.classList.contains('clear-cart')) {
-				localStorage.removeItem('cart');
-				cart = [];
-				this.setCartValue();
-				this.closeCart();
-				while(cartItemContainer.childNodes[0])
-					cartItemContainer.removeChild(cartItemContainer.childNodes[0]);
-				buttonDOM.forEach(x => {
-					this.activeBtn(x);
-				});
-			} else if (event.target.classList.contains('remove-btn')) {
-				const id = event.target.dataset.id;
-				this.removeOffCart(id);
-				cart = Storage.removeGame(cart, id);
-				Storage.saveCart(cart);
-				this.setCartValue(cart);
-			}  else if (event.target.classList.contains('fa-chevron-up')) {
-				const id = event.target.dataset.id;
-				// Tra ve game co id phu hop
-				let itemAmount = cart.find(x => x.id === id);
-				// Luu y: Do local storage da lien ket voi 
-				// Cua 1 bien 
-				itemAmount.amount += 1;
-				Storage.saveCart(cart);
-				this.setCartValue(cart);
-				// Dom hien thi so luong trong gio hang
-				const amountDOM = event.target.nextElementSibling;
-				amountDOM.innerText = itemAmount.amount;
-			} else if (event.target.classList.contains('fa-chevron-down')) {
-				const id = event.target.dataset.id;
-				let itemAmount = cart.find(x => x.id === id);
-				if (itemAmount.amount > 1) {
-					itemAmount.amount -= 1;
-				} else {
-					this.removeOffCart(id);
-					cart = Storage.removeGame(cart, id);
-				
-				}
-				Storage.saveCart(cart);
-				this.setCartValue(cart);
-				// Dom hien thi so luong trong gio hang
-				const amountDOM = event.target.previousElementSibling;
-				amountDOM.innerText = itemAmount.amount;
-			}
-		});
+  cartLogic() {
+    cartDOM.addEventListener("click", (event) => {
+      if (event.target.classList.contains("fa-window-close")) this.closeCart();
+      else if (event.target.classList.contains("clear-cart")) {
+        localStorage.removeItem("cart");
+        cart = [];
+        this.setCartValue();
+        this.closeCart();
+        while (cartItemContainer.childNodes[0])
+          cartItemContainer.removeChild(cartItemContainer.childNodes[0]);
+        buttonDOM.forEach((x) => {
+          this.activeBtn(x);
+        });
+      } else if (event.target.classList.contains("remove-btn")) {
+        const id = event.target.dataset.id;
+        this.removeOffCart(id);
+        cart = Storage.removeGame(cart, id);
+        Storage.saveCart(cart);
+        this.setCartValue(cart);
+      } else if (event.target.classList.contains("fa-chevron-up")) {
+        const id = event.target.dataset.id;
+        let itemAmount = cart.find((x) => x.id === id);
+        itemAmount.amount += 1;
+        Storage.saveCart(cart);
+        this.setCartValue(cart);
+        // Dom hien thi so luong trong gio hang
+        const amountDOM = event.target.nextElementSibling;
+        amountDOM.innerText = itemAmount.amount;
+      } else if (event.target.classList.contains("fa-chevron-down")) {
+        const id = event.target.dataset.id;
+        let itemAmount = cart.find((x) => x.id === id);
+        if (itemAmount.amount > 1) {
+          itemAmount.amount -= 1;
+        } else {
+          this.removeOffCart(id);
+          cart = Storage.removeGame(cart, id);
+        }
+        Storage.saveCart(cart);
+        this.setCartValue(cart);
+        const amountDOM = event.target.previousElementSibling;
+        amountDOM.innerText = itemAmount.amount;
+      }
+    });
 
-		// Hien thi gio hang khi nhan nut gio hang
-		const cartBtn = document.querySelector('.show-cart');
-		cartBtn.addEventListener('click', () => {
-			this.showCart();
-		});
-	}
+    const cartBtn = document.querySelector(".show-cart");
+    cartBtn.addEventListener("click", () => {
+      this.showCart();
+    });
+  }
 }
