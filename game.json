@@ -1,0 +1,100 @@
+{
+  "items": [
+    {
+      "sys": { "id": "1" },
+      "fields": {
+        "title": "hollow knight",
+        "price": 99.99,
+        "image": { "fields": { "file": { "url": "./img/game-1.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "2" },
+      "fields": {
+        "title": "red dead redemption 2",
+        "price": 59.99,
+        "image": { "fields": { "file": { "url": "./img/game-2.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "3" },
+      "fields": {
+        "title": "gta online",
+        "price": 79.99,
+        "image": { "fields": { "file": { "url": "./img/game-3.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "4" },
+      "fields": {
+        "title": "sekiro",
+        "price": 89.99,
+        "image": { "fields": { "file": { "url": "./img/game-4.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "5" },
+      "fields": {
+        "title": "the witch 3",
+        "price": 99.99,
+        "image": { "fields": { "file": { "url": "./img/game-5.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "6" },
+      "fields": {
+        "title": "League of Legend",
+        "price": 99.99,
+        "image": { "fields": { "file": { "url": "./img/game-6.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "7" },
+      "fields": {
+        "title": "Teamfight Tatics",
+        "price": 29.99,
+        "image": { "fields": { "file": { "url": "./img/game-7.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "8" },
+      "fields": {
+        "title": "Fifa 20",
+        "price": 39.99,
+        "image": { "fields": { "file": { "url": "./img/game-8.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "9" },
+      "fields": {
+        "title": "Assassin's Creed Origins",
+        "price": 49.99,
+        "image": { "fields": { "file": { "url": "./img/game-9.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "10" },
+      "fields": {
+        "title": "Death Stranding",
+        "price": 79.99,
+        "image": { "fields": { "file": { "url": "./img/game-10.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "11" },
+      "fields": {
+        "title": "Destiny 2",
+        "price": 199.99,
+        "image": { "fields": { "file": { "url": "./img/game-11.jpg" } } }
+      }
+    },
+    {
+      "sys": { "id": "12" },
+      "fields": {
+        "title": "The Last Of Us Part 2",
+        "price": 89.99,
+        "image": { "fields": { "file": { "url": "./img/game-12.jpg" } } }
+      }
+    }
+  ]
+}
